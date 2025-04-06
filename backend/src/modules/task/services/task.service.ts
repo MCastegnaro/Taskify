@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Sanitize } from 'src/common/helpers/sanitize.helper';
 import {
   TaskEntity,
   TaskStatusEnum,
@@ -35,8 +36,8 @@ export class TaskService {
     }
 
     const taskToSave = this.taskRepository.create({
-      title: task.title,
-      description: task.description,
+      title: Sanitize.input(task.title),
+      description: Sanitize.input(task.description!),
       status: TaskStatusEnum['PENDING'],
       user: userFound,
     });
@@ -50,7 +51,7 @@ export class TaskService {
     const searchParams: FindOptionsWhere<TaskEntity> = {};
 
     if (params.title) {
-      searchParams.title = ILike(`%${params.title}%`);
+      searchParams.title = ILike(`%${Sanitize.input(params.title)}%`);
     }
 
     if (params.status) {
