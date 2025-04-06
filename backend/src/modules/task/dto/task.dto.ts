@@ -1,5 +1,4 @@
 import {
-  IsDateString,
   IsEnum,
   IsOptional,
   IsString,
@@ -7,16 +6,12 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { TaskStatusEnum } from 'src/config/database/entities/task.entity';
 
-export enum TaskStatusEnum {
-  TO_DO = 'TO_DO',
-  IN_PROGRESS = 'IN_PROGRESS',
-  DONE = 'DONE',
-}
 export class TaskDto {
   @IsUUID()
   @IsOptional()
-  id: string;
+  id?: string;
 
   @IsString()
   @MinLength(3)
@@ -26,22 +21,43 @@ export class TaskDto {
   @IsString()
   @MinLength(5)
   @MaxLength(512)
-  description: string;
+  description?: string;
 
   @IsEnum(TaskStatusEnum)
   @IsOptional()
   status: TaskStatusEnum;
-
-  @IsDateString()
-  expirationDate: Date;
 }
 
-export interface FindAllParameters {
+export class CreateTaskDto {
+  @IsString()
+  @MinLength(3)
+  @MaxLength(256)
   title: string;
-  status: string;
+
+  @IsString()
+  @MinLength(5)
+  @MaxLength(512)
+  @IsOptional()
+  description?: string;
+
+  @IsUUID()
+  userId: string;
 }
 
-export class TaskRouteParameters {
-  @IsUUID()
-  id: string;
+export class UpdateTaskDto {
+  @IsString()
+  @MinLength(3)
+  @MaxLength(256)
+  @IsOptional()
+  title: string;
+
+  @IsString()
+  @MinLength(5)
+  @MaxLength(512)
+  @IsOptional()
+  description?: string;
+
+  @IsEnum(TaskStatusEnum)
+  @IsOptional()
+  status: TaskStatusEnum;
 }

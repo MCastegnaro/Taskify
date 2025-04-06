@@ -11,10 +11,10 @@ export class CreateUserTable1743878984286 implements MigrationInterface {
           username varchar(200) NOT NULL,
           name varchar(200) NOT NULL,
           password varchar NOT NULL,
-          createdAt TIMESTAMP NOT NULL DEFAULT now(),
-          updatedAt TIMESTAMP NOT NULL DEFAULT now(),
-          CONSTRAINT PK_user_id PRIMARY KEY (id),
-          CONSTRAINT UQ_user_email UNIQUE (email)
+          "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
+          "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+          CONSTRAINT "PK_user_id" PRIMARY KEY (id),
+          CONSTRAINT "UQ_user_email" UNIQUE (email)
       );`,
     );
   }

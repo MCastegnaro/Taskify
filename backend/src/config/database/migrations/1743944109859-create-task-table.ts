@@ -10,11 +10,11 @@ export class CreateTaskTable1743944109859 implements MigrationInterface {
             title varchar(256) NOT NULL,
             description varchar(512) NULL,
             status varchar(50) NOT NULL DEFAULT 'pending',
-            userId uuid,
-            createdAt TIMESTAMP NOT NULL DEFAULT now(),
-            updatedAt TIMESTAMP NOT NULL DEFAULT now(),
+            "userId" uuid,
+            "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
+            "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
             CONSTRAINT task_pk PRIMARY KEY (id),
-            CONSTRAINT FK_task_user FOREIGN KEY (userId) REFERENCES "user"("id") ON DELETE CASCADE
+            CONSTRAINT "FK_task_user" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE
         );`,
     );
   }

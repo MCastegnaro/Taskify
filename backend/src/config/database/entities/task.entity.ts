@@ -1,7 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserEntity } from './user.entity';
 
-enum TaskStatus {
+export enum TaskStatusEnum {
   PENDING = 'pending',
   IN_PROGRESS = 'in-progress',
   DONE = 'done',
@@ -16,11 +22,12 @@ export class TaskEntity {
   title: string;
 
   @Column({ type: 'varchar' })
-  description: string;
+  description?: string;
 
   @Column({ type: 'varchar' })
-  status: TaskStatus;
+  status: TaskStatusEnum;
 
   @ManyToOne(() => UserEntity, (user) => user.tasks, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: UserEntity;
 }
