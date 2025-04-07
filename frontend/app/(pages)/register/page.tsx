@@ -16,8 +16,10 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    formState: { isValid },
-  } = useForm<RegisterFormData>({});
+    formState: { isValid, errors },
+  } = useForm<RegisterFormData>({
+    mode: "all",
+  });
 
   const { Register } = useAuth();
 
@@ -35,38 +37,113 @@ export default function RegisterPage() {
           </h1>
           <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
             <div>
-              <label className="text-sm font-medium">Nome</label>
+              <label className="text-sm font-medium">
+                Nome<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
-                {...register("name", { required: true })}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Campo obrigatório",
+                  },
+                  minLength: {
+                    value: 3,
+                    message: "Nome deve ter no mínimo 3 caracteres",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "Nome deve ter no máximo 50 caracteres",
+                  },
+                })}
+                className={`${errors.name ? "border-red-500" : "border-gray-300"} mt-1 w-full rounded-md border  p-2`}
               />
             </div>
-
+            {errors.name && (
+              <span className="text-sm text-red-500">
+                {errors.name.message}
+              </span>
+            )}
             <div>
-              <label className="text-sm font-medium">E-mail</label>
+              <label className="text-sm font-medium">
+                E-mail<span className="text-red-500">*</span>
+              </label>
               <input
                 type="email"
-                {...register("email", { required: true })}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2"
+                {...register("email", {
+                  required: {
+                    value: true,
+                    message: "Campo obrigatório",
+                  },
+                  pattern: {
+                    value: /^\S+@\S+\.\S+$/,
+                    message: "E-mail inválido",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "E-mail deve ter no máximo 50 caracteres",
+                  },
+                })}
+                className={`${errors.email ? "border-red-500" : "border-gray-300"} mt-1 w-full rounded-md border  p-2`}
               />
             </div>
+            {errors.email && (
+              <span className="text-sm text-red-500">
+                {errors.email.message}
+              </span>
+            )}
             <div>
-              <label className="text-sm font-medium">Usuário</label>
+              <label className="text-sm font-medium">
+                Usuário <span className="text-red-500">*</span>
+              </label>
               <input
                 type="username"
-                {...register("username", { required: true })}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2"
+                {...register("username", {
+                  required: {
+                    value: true,
+                    message: "Campo obrigatório",
+                  },
+                  minLength: {
+                    value: 3,
+                    message: "Usuário deve ter no mínimo 3 caracteres",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Usuário deve ter no máximo 20 caracteres",
+                  },
+                })}
+                className={`${errors.username ? "border-red-500" : "border-gray-300"} mt-1 w-full rounded-md border  p-2`}
               />
             </div>
+            {errors.username && (
+              <span className="text-sm text-red-500">
+                {errors.username.message}
+              </span>
+            )}
             <div>
-              <label className="text-sm font-medium">Senha</label>
+              <label className="text-sm font-medium">
+                Senha<span className="text-red-500">*</span>
+              </label>
               <input
                 type="password"
-                {...register("password", { required: true })}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2"
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "Campo obrigatório",
+                  },
+                  minLength: {
+                    value: 8,
+                    message: "Senha deve ter no mínimo 8 caracteres",
+                  },
+                })}
+                className={`${errors.password ? "border-red-500" : "border-gray-300"} mt-1 w-full rounded-md border  p-2`}
               />
             </div>
+            {errors.password && (
+              <span className="text-sm text-red-500">
+                {errors.password.message}
+              </span>
+            )}
             <button
               type="submit"
               disabled={!isValid}

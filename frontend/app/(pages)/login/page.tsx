@@ -14,8 +14,10 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { isValid },
-  } = useForm<LoginFormData>({});
+    formState: { isValid, errors },
+  } = useForm<LoginFormData>({
+    mode: "all",
+  });
 
   const { Login } = useAuth();
 
@@ -31,22 +33,46 @@ export default function LoginPage() {
           <h1 className="mb-4 flex justify-center text-2xl font-bold">Login</h1>
           <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
             <div>
-              <label className="text-sm font-medium">Usuário</label>
+              <label className="text-sm font-medium">
+                Usuário<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
-                {...register("username", { required: true })}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2"
+                {...register("username", {
+                  required: {
+                    value: true,
+                    message: "Campo obrigatório",
+                  },
+                })}
+                className={`${errors.username ? "border-red-500" : "border-gray-300"} mt-1 w-full rounded-md border  p-2`}
               />
             </div>
+            {errors.username && (
+              <span className="text-sm text-red-500">
+                {errors.username.message}
+              </span>
+            )}
 
             <div>
-              <label className="text-sm font-medium">Senha</label>
+              <label className="text-sm font-medium">
+                Senha<span className="text-red-500">*</span>
+              </label>
               <input
                 type="password"
-                {...register("password", { required: true })}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2"
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "Campo obrigatório",
+                  },
+                })}
+                className={`${errors.password ? "border-red-500" : "border-gray-300"} mt-1 w-full rounded-md border  p-2`}
               />
             </div>
+            {errors.password && (
+              <span className="text-sm text-red-500">
+                {errors.password.message}
+              </span>
+            )}
             <button
               type="submit"
               disabled={!isValid}

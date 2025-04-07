@@ -3,15 +3,23 @@
 import { AxiosAdapter } from "@/app/config/adapters/axiosAdapter";
 import { CreateSessionParams } from "@/app/data/interfaces/session";
 import { RegisterUserParams } from "@/app/data/interfaces/user";
+import { useToast } from "@/app/hooks/useToastContext";
 import { CreateSessionService } from "@/app/services/auth/CreateSessionService";
 import { CreateUserService } from "@/app/services/auth/CreateUserService";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useEffect, useState } from "react";
 
 interface User {
   id: string;
   username: string;
+}
+
+interface DecodedToken {
+  sub: string;
+  username: string;
+  exp: number;
 }
 
 interface LoginParams {
@@ -44,29 +52,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    // const storedUser = localStorage.getItem("user");
-
-    if (storedToken) {
-      setToken(storedToken);
-      // setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const { ShowToast } = useToast();
 
   const Login = useCallback(
     async (params: CreateSessionParams) => {
       await new CreateSessionService(axios).create(params).then((response) => {
-        setToken(response.token);
+        if (response.statusCode === 401) {
+          ShowToast("Usuário ou senha incorreto!", "error");
+          return;
+        }
 
-        localStorage.setItem("token", response.token);
-        // localStorage.setItem("user", JSON.stringify(user));
-        Cookies.set("token", response.token, { path: "/", expires: 1 });
-        router.push("/tasks");
+        if (response.token) {
+          setToken(response.token);
+          localStorage.setItem("token", response.token);
+          Cookies.set("token", response.token, { path: "/", expires: 1 });
+          ShowToast("Login realizado com sucesso!", "success");
+          router.push("/tasks");
+          return;
+        }
       });
     },
-    [router],
+    [ShowToast, router],
   );
 
   const Register = useCallback(
@@ -82,10 +88,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     setUser(null);
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     Cookies.remove("token");
+    ShowToast("Logout realizado com sucesso!", "success");
+
     router.push("/login");
   };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+
+    if (storedToken) {
+      const decoded = jwtDecode<DecodedToken>(storedToken);
+      setUser({ id: decoded.sub, username: decoded.username });
+      setToken(storedToken);
+    }
+  }, [Login]);
 
   return (
     <AuthContext.Provider value={{ user, token, Login, Register, logout }}>

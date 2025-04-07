@@ -1,12 +1,17 @@
 "use client";
 
 import { AxiosAdapter } from "@/app/config/adapters/axiosAdapter";
-import { AlertProps } from "@/app/data/interfaces/alert";
+
 import { CreateTasksParams } from "@/app/data/interfaces/create-task";
+import { UpdateTasksParams } from "@/app/data/interfaces/update-task";
 import { SearchType } from "@/app/data/types/search";
 import { Task, TaskStatus } from "@/app/data/types/task";
+import { useAuth } from "@/app/hooks/useAuthContext";
+import { useToast } from "@/app/hooks/useToastContext";
 import { CreateTaskService } from "@/app/services/task/CreateTaskService";
+import { DeleteTaskService } from "@/app/services/task/DeleteTaskService";
 import { ListTaskService } from "@/app/services/task/ListTaskService";
+import { UpdateTaskService } from "@/app/services/task/UpdateTaskService";
 import { createContext, ReactNode, useCallback, useState } from "react";
 
 interface TaskContextProps {
@@ -16,8 +21,7 @@ interface TaskContextProps {
   setTasks: (task: Task[]) => void;
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
-  showAlertMessage: AlertProps;
-  setShowAlertMessage: (alert: AlertProps) => void;
+
   search: string;
   setSearch: (value: string) => void;
   searchType: SearchType;
@@ -41,6 +45,9 @@ interface TaskContextProps {
   ) => Promise<void>;
   handleStatusFilter: (status: string) => void;
   CreateTask: (params: CreateTasksParams) => Promise<void>;
+  UpdateTask: (params: UpdateTasksParams) => Promise<void>;
+  DeleteTask: (taskId: string) => Promise<void>;
+  CompleteTask: (taskId: string) => Promise<void>;
 }
 
 export const TaskContext = createContext<TaskContextProps | undefined>(
@@ -53,11 +60,6 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>("all");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [showAlertMessage, setShowAlertMessage] = useState<AlertProps>({
-    show: false,
-    color: "",
-    message: "",
-  });
   const [search, setSearch] = useState<string>("");
   const [searchType, setSearchType] = useState<SearchType>("title");
   const [sortField, setSortField] = useState<string>("title");
@@ -66,6 +68,9 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [totalItems, setTotalItems] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(5);
   const [totalItemsFounded, setTotalItemsFounded] = useState<number>(1);
+
+  const { ShowToast } = useToast();
+  const { user } = useAuth();
 
   const handleStatusFilter = useCallback((status: string) => {
     setSearchType("status");
@@ -96,54 +101,74 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
 
   const CreateTask = useCallback(
     async (params: CreateTasksParams) => {
-      console.log("params", params);
+      const userId = user!.id;
 
-      const userId = "fb4a9194-5c9c-4079-8b3a-68b60aaec864";
       await new CreateTaskService(axios)
         .create(userId, params)
         .then(() => {
-          setShowAlertMessage({
-            show: true,
-            color: "green",
-            message: "Task created successfully!",
-          });
+          ShowToast("Tarefa criada com sucesso!", "success");
         })
         .catch(() => {
-          setShowAlertMessage({
-            show: true,
-            color: "red",
-            message: "Fail to create task.",
-          });
+          ShowToast("Erro ao criar a tarefa!", "error");
         })
         .finally(() => {
           setIsModalOpen(false);
           ListPaginated(search, selectedStatus, currentPage);
-          setTimeout(() => {
-            setShowAlertMessage({
-              show: false,
-              color: "",
-              message: "",
-            });
-          }, 3000);
         });
     },
-    [ListPaginated, currentPage, search, selectedStatus],
+    [ListPaginated, currentPage, search, selectedStatus, ShowToast],
   );
 
-  // const UpdateTask = useCallback(async (params: UpdateTasksParams) => {
-  //   await new UpdateTaskService(axios).patch({});
-  // }, []);
+  const UpdateTask = useCallback(async (params: UpdateTasksParams) => {
+    await new UpdateTaskService(axios)
+      .patch(params)
+      .then(() => {
+        ShowToast("Tarefa editada com sucesso!", "success");
+      })
+      .catch(() => {
+        ShowToast("Erro ao editar a tarefa!", "error");
+      })
+      .finally(() => {
+        setIsModalOpen(false);
+        ListPaginated(search, selectedStatus, currentPage);
+      });
+  }, []);
 
-  // const DeleteTask = useCallback(async (taskId: string) => {
-  //   await new DeleteTaskService(axios).remove({});
-  // }, []);
+  const DeleteTask = useCallback(async (taskId: string) => {
+    await new DeleteTaskService(axios)
+      .remove(taskId)
+      .then(() => {
+        ShowToast("Tarefa removida com sucesso!", "success");
+      })
+      .catch(() => {
+        ShowToast("Erro ao remover a tarefa!", "error");
+      })
+      .finally(() => {
+        setIsModalOpen(false);
+        ListPaginated(search, selectedStatus, currentPage);
+      });
+  }, []);
 
-  // const ChangeStatus = useCallback(async (params: CreateTasksParams) => {
-  //   await new CreateTaskService(axios).({});
-  // }, []);
+  const CompleteTask = useCallback(async (taskId: string) => {
+    await new UpdateTaskService(axios)
+      .complete(taskId)
+      .then(() => {
+        ShowToast("Tarefa concluida com sucesso!", "success");
+      })
+      .catch(() => {
+        ShowToast("Erro ao concluir a tarefa!", "error");
+      })
+      .finally(() => {
+        setIsModalOpen(false);
+        ListPaginated(search, selectedStatus, currentPage);
+      });
+  }, []);
 
   const value: TaskContextProps = {
     CreateTask,
+    UpdateTask,
+    DeleteTask,
+    CompleteTask,
     handleStatusFilter,
     selectedStatus,
     setSelectedStatus,
@@ -151,8 +176,6 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     setTasks,
     isModalOpen,
     setIsModalOpen,
-    showAlertMessage,
-    setShowAlertMessage,
     search,
     setSearch,
     searchType,

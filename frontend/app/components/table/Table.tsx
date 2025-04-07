@@ -1,10 +1,15 @@
 "use client";
 
-import { Task } from "@/app/data/interfaces/task";
-import { status, StatusConverter, TaskStatus } from "@/app/data/types/task";
+import {
+  status,
+  StatusConverter,
+  Task,
+  TaskStatus,
+} from "@/app/data/types/task";
 import { useTaskContext } from "@/app/hooks/useTaskContext";
-import { Alert } from "flowbite-react";
-import { useEffect } from "react";
+import { Dropdown } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { HiDotsVertical } from "react-icons/hi";
 import TaskModal from "../modal/TaskModal";
 
 const Table = () => {
@@ -12,7 +17,6 @@ const Table = () => {
     tasks,
     isModalOpen,
     setIsModalOpen,
-    showAlertMessage,
     search,
     setSearch,
     sortField,
@@ -29,7 +33,12 @@ const Table = () => {
     handleStatusFilter,
     selectedStatus,
     CreateTask,
+    DeleteTask,
+    UpdateTask,
+    CompleteTask,
   } = useTaskContext();
+
+  const [initialData, setInitialData] = useState<Task | undefined>(undefined);
 
   const toggleSort = (field: string) => {
     if (sortField === field) {
@@ -51,6 +60,22 @@ const Table = () => {
     return Math.round(totalItems / itemsPerPage);
   };
 
+  const handleEditTask = (task: Task) => {
+    setIsModalOpen(true);
+    setInitialData(task);
+  };
+
+  const handleSubmit = async (data: Task) => {
+    if (initialData) {
+      UpdateTask({
+        ...data,
+        id: initialData.id,
+      });
+      return;
+    }
+    CreateTask(data);
+  };
+
   useEffect(() => {
     ListPaginated(search, selectedStatus, currentPage);
   }, [
@@ -63,17 +88,17 @@ const Table = () => {
   ]);
 
   return (
-    <div className="flex max-w-7xl flex-col justify-center">
-      <div className="flex items-center justify-between gap-4 rounded-t-sm border-x border-t p-8 pl-16">
-        <div className="flex items-center gap-4">
+    <div className="flex max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-4 border-x border-t p-6 sm:flex-row sm:items-center sm:justify-between sm:rounded-t-sm">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <h3 className="text-lg font-semibold text-blue-800">
             Tarefas adicionadas
           </h3>
-          <span className="me-2 rounded-sm bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+          <span className="rounded-sm bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
             {totalItems + " tarefas"}
           </span>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <input
             type="text"
             placeholder="Buscar por tarefa..."
@@ -95,9 +120,11 @@ const Table = () => {
               </option>
             ))}
           </select>
-
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setInitialData(undefined);
+              setIsModalOpen(true);
+            }}
             className="rounded-md bg-blue-800 px-4 py-2 text-white hover:bg-blue-700"
           >
             Criar Tarefa
@@ -105,49 +132,76 @@ const Table = () => {
         </div>
       </div>
 
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-50">
-            <th
-              className="cursor-pointer border-l pl-16 text-left"
-              onClick={() => toggleSort("title")}
-            >
-              Título{" "}
-              {sortField === "title"
-                ? sortDirection === "ASC"
-                  ? "⬆"
-                  : "⬇"
-                : ""}
-            </th>
-            <th className="cursor-pointer p-2 text-center">Descrição</th>
-            <th
-              className="cursor-pointer border-r p-4"
-              onClick={() => toggleSort("status")}
-            >
-              Status{" "}
-              {sortField === "status"
-                ? sortDirection === "ASC"
-                  ? "⬆"
-                  : "⬇"
-                : ""}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map((item: Task, index: number) => (
-            <tr
-              key={item.id}
-              className={`hover:bg-gray-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-            >
-              <td className="max-w-96 truncate pl-16">{item.title}</td>
-              <td className="p-2 text-center">{item.description}</td>
-              <td className="p-4 text-center">
-                {StatusConverter[item.status]}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full border">
+          <thead>
+            <tr className="bg-gray-50 text-sm">
+              <th
+                className="cursor-pointer border-l pl-4 text-left sm:pl-16"
+                onClick={() => toggleSort("title")}
+              >
+                Título{" "}
+                {sortField === "title"
+                  ? sortDirection === "ASC"
+                    ? "⬆"
+                    : "⬇"
+                  : ""}
+              </th>
+              <th className="p-2 text-center">Descrição</th>
+              <th
+                className="cursor-pointer p-2 text-center"
+                onClick={() => toggleSort("status")}
+              >
+                Status{" "}
+                {sortField === "status"
+                  ? sortDirection === "ASC"
+                    ? "⬆"
+                    : "⬇"
+                  : ""}
+              </th>
+              <th className="p-2 text-center">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {tasks.map((item: Task, index: number) => (
+              <tr
+                key={item.id}
+                className={`hover:bg-gray-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+              >
+                <td className="max-w-96 truncate pl-4 sm:pl-16">
+                  {item.title}
+                </td>
+                <td className="truncate p-2 pl-4 text-center sm:pl-16">
+                  {item.description}
+                </td>
+                <td className="p-2 text-center">
+                  {StatusConverter[item.status]}
+                </td>
+                <td className="flex justify-center p-2 text-center">
+                  <Dropdown
+                    arrowIcon={false}
+                    inline
+                    dismissOnClick={true}
+                    label={
+                      <HiDotsVertical className="cursor-pointer text-lg text-gray-600" />
+                    }
+                  >
+                    <Dropdown.Item onClick={() => handleEditTask(item)}>
+                      Editar tarefa
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => CompleteTask(item.id)}>
+                      Concluir tarefa
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => DeleteTask(item.id)}>
+                      Remover tarefa
+                    </Dropdown.Item>
+                  </Dropdown>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {tasks.length <= 0 && (
         <div className="flex w-full items-center justify-center border-x bg-gray-50 hover:bg-gray-200">
@@ -155,7 +209,7 @@ const Table = () => {
         </div>
       )}
 
-      <div className="mb-20 flex items-center justify-between border border-t-0 p-8 px-16">
+      <div className="mb-20 flex flex-col items-center justify-between gap-4 border border-t-0 p-6 sm:flex-row sm:px-16">
         {tasks.length > 0 && (
           <>
             <select
@@ -175,13 +229,13 @@ const Table = () => {
             <span>
               Página {currentPage} de {handlePagination()}
             </span>
-            <div>
+            <div className="flex gap-2">
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
                 className="rounded-md bg-gray-50 px-4 py-2 text-blue-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {"<- Previous"}
+                {"<- Anterior"}
               </button>
               <button
                 disabled={currentPage === handlePagination()}
@@ -190,7 +244,7 @@ const Table = () => {
                 }
                 className="rounded-md bg-gray-50 px-4 py-2 text-blue-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {"Next ->"}
+                {"Próxima ->"}
               </button>
             </div>
           </>
@@ -200,16 +254,9 @@ const Table = () => {
       {isModalOpen && (
         <TaskModal
           onClose={() => setIsModalOpen(false)}
-          onSubmit={(data) => CreateTask(data)}
+          onSubmit={(data) => handleSubmit(data as Task)}
+          initialData={initialData}
         />
-      )}
-
-      {showAlertMessage.show && (
-        <div className="absolute right-4 top-24 flex">
-          <Alert className="p-6" color={showAlertMessage.color}>
-            {showAlertMessage.message}
-          </Alert>
-        </div>
       )}
     </div>
   );

@@ -14,9 +14,9 @@ export const status: Status[] = [
 
 export const StatusConverter: { [key: string]: string } = {
   all: "Todas",
-  pending: "Pendentes",
+  pending: "Pendente",
   "in-progress": "Em progresso",
-  done: "Concluídas",
+  done: "Concluída",
 };
 
 export type Task = {

@@ -38,35 +38,6 @@ const TaskModal = ({ onClose, onSubmit, initialData }: TaskModalProps) => {
     onClose();
   };
 
-  //   const UploadFile = useCallback(async () => {
-  //     setIsLoading(true);
-  //     await new ProductService(axios)
-  //       .upload(file)
-  //       .then(() => {
-  //         setIsModalOpen(false);
-  //         setShowAlertMessage({
-  //           show: true,
-  //           color: "green",
-  //           message: "File upload completed successfully!",
-  //         });
-  //         setFile(null);
-  //       })
-  //       .catch(() => {
-  //         setShowAlertMessage({
-  //           show: true,
-  //           color: "red",
-  //           message: "Fail to upload file. Only CSV files are allowed!",
-  //         });
-  //       })
-  //       .finally(() => {
-  //         setIsLoading(false);
-  //         ListPaginated();
-  //         setTimeout(() => {
-  //           setShowAlertMessage({ show: false, color: "", message: "" });
-  //         }, 10000);
-  //       });
-  //   }, [ListPaginated, file, setIsModalOpen, setShowAlertMessage]);
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-2xl transition-transform duration-300 ease-in-out">
@@ -86,7 +57,12 @@ const TaskModal = ({ onClose, onSubmit, initialData }: TaskModalProps) => {
             </label>
             <input
               type="text"
-              {...register("title", { required: true })}
+              {...register("title", {
+                required: {
+                  value: true,
+                  message: "Campo obrigatório",
+                },
+              })}
               className="mt-1 block w-full rounded-md border border-gray-300 p-2"
             />
           </div>

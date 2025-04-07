@@ -19,7 +19,7 @@ export class CreateTaskService {
       url: this.path,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmYjRhOTE5NC01YzljLTQwNzktOGIzYS02OGI2MGFhZWM4NjQiLCJ1c2VybmFtZSI6Im1jYXN0ZWduYXJvIiwiaWF0IjoxNzQzOTcwODU2LCJleHAiOjE3NDQwNTcyNTZ9.rmYMjnCdwxdk-SporSY_ra4PNbKB7ejcdNs3N1Biyqg`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: { ...params, userId },
     });

@@ -6,13 +6,15 @@ import {
 
 export class CreateSessionService {
   constructor(
-    private readonly httpClient: HttpClient<CreateSessionParamsResponse>,
+    private readonly httpClient: HttpClient<
+      CreateSessionParamsResponse | CreateSessionParamsResponse
+    >,
     private readonly path = "/auth",
   ) {}
 
   async create(
     params: CreateSessionParams,
-  ): Promise<CreateSessionParamsResponse> {
+  ): Promise<CreateSessionParamsResponse | CreateSessionParamsResponse> {
     const url = new URL(this.path, "http://localhost:3333");
 
     console.log("Login payload:", params);
@@ -28,6 +30,8 @@ export class CreateSessionService {
 
     switch (statusCode) {
       case HttpStatusCode.ok:
+        return body as CreateSessionParamsResponse;
+      case HttpStatusCode.unauthorized:
         return body as CreateSessionParamsResponse;
       default:
         throw new Error();

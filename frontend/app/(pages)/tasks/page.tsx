@@ -3,10 +3,10 @@ import Table from "../../components/table/Table";
 import TabList from "../../components/tabs/TabList";
 import { TaskProvider } from "../../contexts/task/TaskContext";
 
-export default async function ProductsPage() {
+export default async function TaskPage() {
   return (
     <main className="h-screen">
-      <Header showOptions />
+      <Header showOptions={true} />
       <section className="mx-auto flex max-w-7xl flex-col justify-start gap-4">
         <h2 className="mb-6 mt-12 text-2xl font-semibold text-blue-800">
           Configurações

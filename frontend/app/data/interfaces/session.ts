@@ -4,6 +4,8 @@ export interface CreateSessionParams {
 }
 
 export interface CreateSessionParamsResponse {
-  token: string;
-  expiresIn: string;
+  token?: string;
+  expiresIn?: string;
+  message?: string;
+  statusCode?: number;
 }

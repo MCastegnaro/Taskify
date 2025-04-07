@@ -10,16 +10,13 @@ export class UpdateTaskService {
     private readonly path = "/tasks",
   ) {}
 
-  async patch(
-    taskId: string,
-    params: UpdateTasksParams,
-  ): Promise<UpdateTasksResponseDto> {
+  async patch(params: UpdateTasksParams): Promise<UpdateTasksResponseDto> {
     const { statusCode, body } = await this.httpClient.request({
       method: "patch",
-      url: `${this.path}/${taskId}`,
+      url: `${this.path}/${params.id}`,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmYjRhOTE5NC01YzljLTQwNzktOGIzYS02OGI2MGFhZWM4NjQiLCJ1c2VybmFtZSI6Im1jYXN0ZWduYXJvIiwiaWF0IjoxNzQzOTcwODU2LCJleHAiOjE3NDQwNTcyNTZ9.rmYMjnCdwxdk-SporSY_ra4PNbKB7ejcdNs3N1Biyqg`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: params,
     });
@@ -27,6 +24,24 @@ export class UpdateTaskService {
     switch (statusCode) {
       case HttpStatusCode.ok:
         return body as UpdateTasksResponseDto;
+      default:
+        throw new Error();
+    }
+  }
+
+  async complete(taskId: string): Promise<void> {
+    const { statusCode } = await this.httpClient.request({
+      method: "patch",
+      url: `${this.path}/${taskId}/complete`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return;
       default:
         throw new Error();
     }
