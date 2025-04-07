@@ -1,52 +1,70 @@
 import "../support/commands";
+import "../support/e2e";
+
+const user = {
+  name: "Test user",
+  email: "teste@teste.com",
+  username: "testuser",
+  password: "senha@123",
+};
+
+const login = () => {
+  cy.get('input[name="username"]').type(user.email);
+  cy.get('input[name="password"]').type(user.password);
+  cy.contains("Entrar").click();
+  cy.wait("@postLogin").its("response.statusCode").should("eq", 200);
+};
 
 describe("Aplicação de Tarefas - E2E", () => {
-  const user = {
-    name: "Test user",
-    email: "teste@teste.com",
-    username: "testuser",
-    password: "senha@123",
-  };
-
   beforeEach(() => {
     cy.visit("http://localhost:3001/login");
+
+    cy.intercept("POST", "/auth/login", {
+      fixture: "login.json",
+    }).as("postLogin");
+
+    cy.intercept(
+      "GET",
+      "/tasks?page=1&limit=5&orderBy=title&orderDirection=ASC",
+      {
+        fixture: "task_list.json",
+      },
+    ).as("getTasks");
+
+    cy.intercept(
+      "PATCH",
+      "**/tasks/0b67f645-76bd-4b7d-be68-bdf234ab0de0/complete",
+      {
+        statusCode: 204,
+        body: {},
+      },
+    ).as("completeTask");
   });
 
-  it("Registro de usuário", () => {
-    cy.contains("Registrar").click();
-    cy.get('input[name="name"]').type(user.name);
-    cy.get('input[name="email"]').type(user.email);
-    cy.get('input[name="username"]').type(user.username);
-    cy.get('input[name="password"]').type(user.password);
-    cy.contains("Cadastrar").click();
+  it("Editar titulo da tarefa", () => {
+    login();
+
+    cy.wait("@getTasks").its("response.statusCode").should("eq", 200);
+    cy.contains("Minha tarefa E2E").should("exist");
+
+    cy.get("tbody > :nth-child(1) > .justify-center")
+      .find(".button-complete")
+      .click();
+    cy.get('[data-cy="dropdown-edit"]').click();
+
+    cy.get(".mb-4").should("be.exist").contains("Editar Tarefa");
+    cy.get('input[name="title"]').should("have.value", "Minha tarefa E2E");
+
+    cy.get('input[name="title"]').click().clear().type("Título editado");
+
+    cy.get(".space-y-4 > .bg-blue-800").click();
+
+    cy.get(".mb-4").should("not.exist");
+
+    cy.wait("@getTasks").its("response.statusCode").should("eq", 200);
   });
 
-  it("Login com sucesso", () => {
-    cy.contains("Entrar").click();
-    cy.get('input[name="email"]').type(user.email);
-    cy.get('input[name="password"]').type(user.password);
-    cy.contains("Entrar").click();
-    cy.contains("Tarefas adicionadas").should("exist");
-  });
-
-  // it("Criação de nova tarefa", () => {
-  //   cy.contains("Criar Tarefa").click();
-  //   cy.get('input[name="title"]').type("Minha tarefa E2E");
-  //   cy.get('textarea[name="description"]').type("Descrição da tarefa");
-  //   cy.contains("Salvar").click();
-  //   cy.contains("Minha tarefa E2E").should("exist");
-  // });
-
-  // it("Marcar tarefa como concluída", () => {
-  //   cy.contains("Minha tarefa E2E")
-  //     .parent()
-  //     .within(() => {
-  //       cy.contains("Concluir tarefa").click();
-  //     });
-  //   cy.contains("Concluída").should("exist");
-  // });
-
-  // it("Exclusão de tarefa", () => {
+  //  it("Exclusão de tarefa", () => {
   //   cy.contains("Minha tarefa E2E")
   //     .parent()
   //     .within(() => {
@@ -55,27 +73,34 @@ describe("Aplicação de Tarefas - E2E", () => {
   //   cy.contains("Minha tarefa E2E").should("not.exist");
   // });
 
+  // it("Marcar tarefa como concluída", () => {
+  //   login();
+
+  //   cy.wait("@getTasks").its("response.statusCode").should("eq", 200);
+  //   cy.contains("Minha tarefa E2E").should("exist");
+
+  //   cy.get("tbody > :nth-child(1) > .justify-center")
+  //     .find(".button-complete")
+  //     .click();
+  //   cy.get('[data-cy="dropdown-complete"]').click();
+
+  //   cy.wait("@completeTasks").its("response.statusCode").should("eq", 204);
+  //   cy.wait("@getTasks").its("response.statusCode").should("eq", 200);
+  //   cy.get("tbody > :nth-child(1) > :nth-child(3)")
+  //     .contains("Concluída")
+  //     .should("exist");
+  // });
+
   // it("Filtro por status", () => {
+  //   login();
+  //   cy.contains("Minha tarefa E2E").should("exist");
   //   cy.get("select").select("pendente");
   //   cy.get("table tbody tr").each(($el) => {
   //     cy.wrap($el).contains("Pendente");
   //   });
-  //   cy.get("select").select("concluída");
+  //   cy.get("select").select("pendente");
   //   cy.get("table tbody tr").each(($el) => {
   //     cy.wrap($el).contains("Concluída");
   //   });
-  // });
-
-  // it("Bloqueio de rotas privadas sem autenticação", () => {
-  //   cy.clearCookies();
-  //   cy.visit("http://localhost:3000/dashboard");
-  //   cy.url().should("include", "/login");
-  // });
-
-  // it("Validações de formulário", () => {
-  //   cy.contains("Criar Tarefa").click();
-  //   cy.contains("Salvar").click();
-  //   cy.contains("Título é obrigatório").should("exist");
-  //   cy.contains("Descrição é obrigatória").should("exist");
   // });
 });

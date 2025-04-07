@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+require("@cypress/xpath");
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -12,12 +13,6 @@
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add("login", (user) => {
-  cy.visit("/login");
-  cy.get('input[name="email"]').type(user.email);
-  cy.get('input[name="password"]').type(user.password);
-  cy.contains("Entrar").click();
-});
 //
 //
 // -- This is a child command --

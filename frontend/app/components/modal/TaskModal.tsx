@@ -20,13 +20,14 @@ const TaskModal = ({ onClose, onSubmit, initialData }: TaskModalProps) => {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid, errors },
   } = useForm<TaskFormData>({
     defaultValues: initialData ?? {
       title: "",
       description: "",
       status: "pending",
     },
+    mode: "all",
   });
 
   useEffect(() => {
@@ -63,9 +64,12 @@ const TaskModal = ({ onClose, onSubmit, initialData }: TaskModalProps) => {
                   message: "Campo obrigatório",
                 },
               })}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+              className={`${errors.title ? "border-red-500" : "border-gray-300"} mt-1 w-full rounded-md border  p-2`}
             />
           </div>
+          {errors.title && (
+            <span className="text-sm text-red-500">{errors.title.message}</span>
+          )}
 
           <div>
             <label className="block text-sm font-medium">Descrição</label>
@@ -92,8 +96,8 @@ const TaskModal = ({ onClose, onSubmit, initialData }: TaskModalProps) => {
 
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full rounded-md bg-blue-800 px-4 py-2 font-semibold text-white hover:bg-blue-700"
+            disabled={!isValid}
+            className="w-full rounded-md bg-blue-800 px-4 py-2 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
           >
             {initialData ? "Salvar Alterações" : "Criar Tarefa"}
           </button>

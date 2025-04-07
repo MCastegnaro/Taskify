@@ -178,24 +178,42 @@ const Table = () => {
                   {StatusConverter[item.status]}
                 </td>
                 <td className="flex justify-center p-2 text-center">
-                  <Dropdown
-                    arrowIcon={false}
-                    inline
-                    dismissOnClick={true}
-                    label={
-                      <HiDotsVertical className="cursor-pointer text-lg text-gray-600" />
-                    }
+                  <button
+                    role="button"
+                    className="button-complete"
+                    data-cy="btn-dropdown-actions"
                   >
-                    <Dropdown.Item onClick={() => handleEditTask(item)}>
-                      Editar tarefa
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => CompleteTask(item.id)}>
-                      Concluir tarefa
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => DeleteTask(item.id)}>
-                      Remover tarefa
-                    </Dropdown.Item>
-                  </Dropdown>
+                    <Dropdown
+                      arrowIcon={false}
+                      inline
+                      dismissOnClick={true}
+                      data-cy="btn-dropdown-actions"
+                      className="p-2"
+                      as={"button"}
+                      label={
+                        <HiDotsVertical className="cursor-pointer text-lg text-gray-600" />
+                      }
+                    >
+                      <Dropdown.Item
+                        data-cy="dropdown-edit"
+                        onClick={() => handleEditTask(item)}
+                      >
+                        Editar tarefa
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        data-cy="dropdown-complete"
+                        onClick={() => CompleteTask(item.id)}
+                      >
+                        Concluir tarefa
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        data-cy="dropdown-remove"
+                        onClick={() => DeleteTask(item.id)}
+                      >
+                        Remover tarefa
+                      </Dropdown.Item>
+                    </Dropdown>
+                  </button>
                 </td>
               </tr>
             ))}
