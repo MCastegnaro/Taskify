@@ -1,5 +1,9 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { CreateUserDto, CreateUserResponse } from '../user/dto/user.dto';
+import {
+  CreateSessionDto,
+  CreateUserDto,
+  CreateUserResponse,
+} from '../user/dto/user.dto';
 import { UserService } from '../user/services/user.service';
 import { AuthResponseDto } from './dto/auth.dto';
 import { AuthService } from './services/auth.service';
@@ -11,13 +15,10 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
-  @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(
-    @Body('username') username: string,
-    @Body('password') password: string,
-  ): Promise<AuthResponseDto> {
-    return await this.authService.signIn(username, password);
+  @HttpCode(HttpStatus.OK)
+  async signIn(@Body() auth: CreateSessionDto): Promise<AuthResponseDto> {
+    return await this.authService.signIn(auth);
   }
 
   @Post('register')

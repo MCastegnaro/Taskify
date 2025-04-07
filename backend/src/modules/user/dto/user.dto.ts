@@ -16,3 +16,8 @@ export interface CreateUserResponse {
   id: string;
   username: string;
 }
+
+export interface CreateSessionDto {
+  username: string;
+  password: string;
+}

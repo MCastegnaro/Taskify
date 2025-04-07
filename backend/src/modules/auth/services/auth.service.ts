@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync as bcryptCompareSync } from 'bcrypt';
+import { CreateSessionDto } from 'src/modules/user/dto/user.dto';
 import { UserService } from 'src/modules/user/services/user.service';
 import { AuthResponseDto } from '../dto/auth.dto';
 
@@ -19,10 +20,10 @@ export class AuthService {
     ) as number;
   }
 
-  async signIn(username: string, password: string): Promise<AuthResponseDto> {
-    const foundUser = await this.userService.findByUserName(username);
+  async signIn(params: CreateSessionDto): Promise<AuthResponseDto> {
+    const foundUser = await this.userService.findByUserName(params.username);
 
-    if (!foundUser || !bcryptCompareSync(password, foundUser.password)) {
+    if (!foundUser || !bcryptCompareSync(params.password, foundUser.password)) {
       throw new UnauthorizedException();
     }
 
