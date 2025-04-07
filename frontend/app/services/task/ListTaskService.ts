@@ -11,7 +11,7 @@ export class ListTaskService {
   ) {}
 
   async list(params: FindAllTasksParams): Promise<FindAllResponseDto> {
-    const url = new URL(this.path, "http://localhost:3333");
+    const url = new URL(this.path, "http://localhost:3000");
     const searchParams = new URLSearchParams();
 
     if (params.search.length >= 3) searchParams.append("title", params.search);

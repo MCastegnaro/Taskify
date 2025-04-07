@@ -8,7 +8,7 @@ export class CreateUserService {
   ) {}
 
   async create(params: CreateUserParams): Promise<void> {
-    const url = new URL(this.path, "http://localhost:3333");
+    const url = new URL(this.path, "http://localhost:3000");
 
     const { statusCode } = await this.httpClient.request({
       method: "post",

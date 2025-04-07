@@ -15,7 +15,7 @@ export class CreateSessionService {
   async create(
     params: CreateSessionParams,
   ): Promise<CreateSessionParamsResponse | CreateSessionParamsResponse> {
-    const url = new URL(this.path, "http://localhost:3333");
+    const url = new URL(this.path, "http://localhost:3000");
 
     console.log("Login payload:", params);
 

@@ -6,7 +6,7 @@ import {
 import axios, { AxiosResponse } from "axios";
 
 const axiosApi = axios.create({
-  baseURL: `http://localhost:3333`,
+  baseURL: `http://localhost:3000`,
 });
 
 export class AxiosAdapter implements HttpClient {
