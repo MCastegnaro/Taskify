@@ -1,101 +1,62 @@
-# 🚀 Full Stack Project (Frontend & Backend)
+# 📦 Backend - NestJS API
 
-This project consists of a **NestJS** backend and a **Next.js** frontend, using **PostgreSQL** as the database and **Docker** for containerization.
+Este é o projeto de backend da aplicação, desenvolvido com [NestJS](https://nestjs.com/). Ele fornece as rotas e lógica de negócio da API RESTful.
 
----
+## 🚀 Tecnologias
 
-## 📌 Technologies Used
+- Node.js
+- NestJS
+- TypeScript
+- Prisma ORM
+- PostgreSQL
 
-### Backend:
+## ✅ Pré-requisitos
 
-- [NestJS](https://nestjs.com/) - Node.js framework
-- [TypeORM](https://typeorm.io/) - ORM for database management
-- [PostgreSQL](https://www.postgresql.org/) - Relational database
-- [Docker](https://www.docker.com/) - Containerization
-- [Adminer](https://www.adminer.org/) - Simple local SGBD
-- [Jest](https://jestjs.io/) - Automated testing
+- Node.js 18+
+- PostgreSQL
+- Npm
 
-### Frontend:
+## 📦 Como rodar esta API
 
-- [Next.js](https://nextjs.org/) - React-based framework
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [Axios](https://axios-http.com/) - HTTP client for API requests
+1. Na raiz desta pasta rode `npm install` e instale as dependências.
+2. Configure o .env, existe um `.env.exemple` com as variaveis necessárias.
+3. Suba as imagens do banco Postgres e do SGBD Adminer usando o comando `docker-compose up -d`.
+4. Rode as migrações com `npm run migration:run` para criar as tabelas e configurações necessárias no banco de dados.
+5. Por ultimo, execute sua aplicação usando o comando `npm run start:dev`.
 
----
+## Funcionalidades da API
 
-## Setup Instructions for BACKEND
+✅ Autenticação
 
-`Instructions for configuring the frontend are in the flatirons-ui readme.`
+- POST /auth/register: Cadastra um novo usuário.
+  []
+- POST /auth/login: Autentica um usuário e retorna um token JWT.
 
-### 1️. Clone the Repository
+📋 Tarefas
 
-```bash
-git clone https://github.com/flatironsdevelopment/rails_node_test_MCastegnaro.git
+- GET /tasks: Lista todas as tarefas do usuário autenticado.
+- POST /tasks: Cria uma nova tarefa.
+- PATCH /tasks/:id: Atualiza dados da tarefa.
+- DELETE /tasks/:id: Remove uma tarefa.
 
-cd rails_node_test_MCastegnaro/wabapp/flatirons-server
-```
+🔁 Controle de Conclusão
 
-### 2️. Setup Environment Variables
+- PATCH /tasks/:id/complete: Marca a tarefa como concluída.
 
-Create a .env file in the backend/ directory using .env.example as a reference:
+📌 Status da Tarefa
 
-```bash
-cp ./webapp/flatirons-server/.env.example ./webapp/flatirons-server/.env.example
+A tarefa pode conter campos como:
 
-```
+- title: título
+- description: descrição (opcional)
+- status: status da tarefa
 
-Modify the .env file with your database credentials.
+# Screenshots
 
-### 3. Create and running a database with Docker
+Registro
 
-In the root of flatirons-server folder run `docker-compose up -d`. This command will upload a postgres database that will be available in `localhost:8080` through Adminer SGDB.
+![Registro](assets/registro.png)
 
-### 4. Apply database migrations
+Login
 
-In the root of flatirons-server folder run `npm run migration:run`. This command will create the necessary tables in the database.
-
-### 5. Running the Backend
-
-In the root of flatirons-server folder run the fallows commands:
-
-```bash
-npm install
-npm run start:dev
-```
-
-These commands will first install the project's necessary dependencies and then make the API available for access in `localhost:3333` .
-
-# key features
-
-GET /products - get a list of products
-
-![Project Logo](assets/api.png)
-
-POST /products/upload - upload a csv file
-
-![Project Logo](assets/upload.png)
-
-### Common problems
-
-- Error connecting to database:
-  Make sure PostgreSQL containers are running (docker ps).
-
-- ECONNREFUSED error when starting the API:
-  The bank may not be ready. Wait a few seconds or restart Docker:
-
-```bash
-docker-compose restart
-```
-
-- Migrations not applied correctly:
-  Check the connection with the bank and run again:
-
-```bash
-npm run migration:run
-```
-
-### You are now ready to run the project! Enjoy 🚀
-
-## 📜 License
-
-This project is licensed under the MIT License.
+![Project Logo](assets/login.png)
