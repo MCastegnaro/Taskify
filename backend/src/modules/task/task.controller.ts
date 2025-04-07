@@ -40,6 +40,12 @@ export class TaskController {
     return await this.taskService.patch(params.id, task);
   }
 
+  @Patch('/:id/complete')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async complete(@Param() params: TaskRouteParameters): Promise<void> {
+    return await this.taskService.complete(params.id);
+  }
+
   @Post()
   async create(@Body() task: CreateTaskDto): Promise<TaskDto> {
     return await this.taskService.create(task);

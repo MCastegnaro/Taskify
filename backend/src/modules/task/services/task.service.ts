@@ -107,6 +107,27 @@ export class TaskService {
     return this.mapEntityToDto(taskToUpdate);
   }
 
+  async complete(id: string): Promise<void> {
+    const taskFound = await this.taskRepository.findOne({
+      where: { id },
+    });
+
+    if (!taskFound) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
+
+    if (taskFound.status === TaskStatusEnum['DONE']) {
+      throw new BadRequestException(`Task with ID ${id} already completed`);
+    }
+
+    const taskToUpdate = this.taskRepository.create({
+      ...taskFound,
+      status: TaskStatusEnum['DONE'],
+    });
+
+    await this.taskRepository.update(id, this.mapDtoToEntity(taskToUpdate));
+  }
+
   async remove(id: string) {
     const taskFound = await this.taskRepository.findOne({
       where: { id },

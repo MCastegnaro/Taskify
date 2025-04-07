@@ -19,7 +19,6 @@ export class TaskDto {
   title: string;
 
   @IsString()
-  @MinLength(5)
   @MaxLength(512)
   description?: string;
 
@@ -35,7 +34,6 @@ export class CreateTaskDto {
   title: string;
 
   @IsString()
-  @MinLength(5)
   @MaxLength(512)
   @IsOptional()
   description?: string;
@@ -52,7 +50,6 @@ export class UpdateTaskDto {
   title: string;
 
   @IsString()
-  @MinLength(5)
   @MaxLength(512)
   @IsOptional()
   description?: string;
