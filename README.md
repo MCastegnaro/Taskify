@@ -1,6 +1,6 @@
-# Projeto de Tarefas com Next.js
+# Desafio Técnico – Taskify
 
-Este projeto é uma aplicação fullstack desenvolvida com **Next.js** **NestJS** que implementa um sistema de gerenciamento de tarefas com autenticação e roteamento protegidos. Os usuários podem buscar, filtrar, ordenar, criar, concluir e deletar tarefas. A aplicação utiliza **Context API**, **Tailwind CSS**, **Flowbite**, **Express.js**, **TypeORM** e **React Icons**.
+Este projeto é uma aplicação fullstack desenvolvida com **Next.js** e **NestJS** que implementa um sistema de gerenciamento de tarefas com autenticação e roteamento protegidos. Os usuários podem buscar, filtrar, ordenar, criar, concluir e deletar tarefas. A aplicação utiliza **Context API**, **Tailwind CSS**, **Flowbite**, **Express.js**, **TypeORM** e **React Icons**.
 
 ## Funcionalidades
 
@@ -66,14 +66,91 @@ Sendo:
 - Password: pgpassword
 - Base de dados: taskifydb
 
-## Estrutura do Projeto
+7. Aproveitar o projeto!
 
-- hooks/useTaskContext.ts: Gerencia o contexto global das tarefas
-- components/table/Table.tsx: Componente principal da tabela de tarefas
-- components/modal/TaskModal.tsx: Modal para criação de novas tarefas
-- data/types/task.ts: Tipagens das tarefas
-- pages/api/: Endpoints de API (exemplo, se aplicável)
-- app/: Estrutura do App Router (Next.js 13+)
+## Estrutura do Projeto front
+
+```bash
+app/
+├── (pages)/             # Rotas principais do app
+│   ├── login/           # Página de login
+│   ├── register/        # Página de cadastro
+│   └── tasks/           # Página protegida com as tarefas
+│       ├── page.tsx     # Página principal de tarefas
+│       ├── 404.tsx      # Página de erro
+│       └── layout.tsx   # Layout compartilhado
+│
+├── globals.css          # Estilos globais da aplicação
+│
+components/              # Componentes reutilizáveis
+├── header/              # Cabeçalho e navegação
+├── modal/               # Modais reutilizáveis
+├── table/               # Tabelas de dados
+└── tabs/                # Componentes de abas
+
+config/
+└── adapters/            # Adaptadores de requisições (ex: Axios)
+    └── axiosAdapter.ts
+
+contexts/                # Contextos globais (Auth, Toast, Task)
+├── auth/
+│   └── AuthContext.tsx
+├── task/
+│   └── TaskContext.tsx
+└── toast/
+    └── ToastContext.tsx
+
+data/                    # Dados estáticos e auxiliares
+interfaces/              # Interfaces TypeScript
+types/                   # Tipagens globais
+hooks/                   # Hooks personalizados
+services/                # Serviços de comunicação com a API
+
+assets/                  # Imagens e outros recursos visuais
+
+cypress/                 # Testes End-to-End com Cypress
+├── e2e/                 # Testes de fluxo do sistema
+├── fixtures/            # Mocks para testes
+├── support/             # Configuração global do Cypress
+
+public/                  # Arquivos públicos
+.env.example             # Exemplo do arquivo de variáveis de ambiente
+```
+
+## Estrutura do projeto backend
+
+```bash
+src/
+├── config/                # Configurações globais do projeto
+│   └── database/
+│       ├── entities/      # Entidades do TypeORM (ex: User)
+│       ├── migrations/    # Arquivos de migração
+│       ├── db.module.ts   # Módulo de conexão com o banco
+│       └── typeOrm.migration-config.ts # Config para CLI do TypeORM
+│
+├── modules/               # Módulos de funcionalidades
+│   ├── auth/              # Autenticação e autorização
+│   │   ├── dto/           # DTOs de autenticação
+│   │   ├── services/      # Serviços relacionados
+│   │   ├── auth.controller.ts
+│   │   ├── auth.guard.ts
+│   │   └── auth.module.ts
+│   │
+│   ├── task/              # Funcionalidades de tarefas
+│   │   ├── dto/
+│   │   ├── services/
+│   │   ├── task.controller.ts
+│   │   └── task.module.ts
+│   │
+│   └── user/              # Gerenciamento de usuários
+│       ├── dto/
+│       ├── services/
+│       ├── user.controller.ts
+│       └── user.module.ts
+│
+├── main.ts                # Ponto de entrada da aplicação
+└── app.module.ts          # Módulo raiz
+```
 
 ## Funcionalidade da Tabela
 
@@ -84,6 +161,8 @@ A tabela permite:
 - Paginação com controle de quantos itens por página
 - Dropdown de ações com opções de concluir ou excluir tarefas
 - Filtro por status diretamente no select do cabeçalho
+
+![alt text](/assets/fav.png)
 
 ## Observações
 
