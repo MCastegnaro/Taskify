@@ -25,6 +25,13 @@ Este é o projeto de frontend da aplicação, desenvolvido com [Next.js](https:/
 
 ![alt text](/assets/login.png)
 
+## 📦 Como os testes end-to-end (cypress)
+
+1. Primeiramente, garanta que as dependências do projeto já estejam instaladas.
+2. Rode o projeto usando o comando `npm run dev`.
+3. Em seguida, execute o comando: `npm run cypress:open`.
+4. A CLI do cypress irá abrir e listar todos os testes disponíveis no projeto.
+
 ## Funcionalidades da UI
 
 🔐 Autenticação
