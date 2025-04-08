@@ -23,8 +23,27 @@ Este projeto é uma aplicação fullstack desenvolvida com **Next.js** e **NestJ
 - [React Icons](https://react-icons.github.io/react-icons/)
 - [Express.js](https://expressjs.com/)
 
-## Live on
-Caso queira apenas conhecer o projeto, ele está disponível para acesso em: https://taskify-ten-beta.vercel.app/login
+## 🔗 Acesso ao Projeto
+
+🖥️ Aplicação Web (Frontend)
+Você pode acessar a aplicação completa através do link abaixo:
+
+👉 https://taskify-ten-beta.vercel.app/login
+
+🛠️ Testes da API com Insomnia ou Postman
+
+Se quiser testar os recursos da API diretamente:
+
+Na raiz deste repositório, há um arquivo chamado `insomnia-base.json`.
+Importe esse arquivo no Insomnia ou no Postman.
+
+Todas as rotas estarão prontas para uso, incluindo:
+
+- Registro de usuário
+- Login
+- Criação, listagem, edição e remoção de tarefas
+
+Ideal para desenvolvedores que queiram testar a API sem rodar o projeto localmente.
       
 ## Como rodar o projeto
 
