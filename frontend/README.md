@@ -32,6 +32,8 @@ Este é o projeto de frontend da aplicação, desenvolvido com [Next.js](https:/
 3. Em seguida, execute o comando: `npm run cypress:open`.
 4. A CLI do cypress irá abrir e listar todos os testes disponíveis no projeto.
 
+![alt text](/assets/testes.png)
+
 ## Funcionalidades da UI
 
 🔐 Autenticação

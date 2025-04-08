@@ -1,6 +1,6 @@
 # Projeto de Tarefas com Next.js
 
-Este projeto é uma aplicação desenvolvida com **Next.js** que implementa um sistema de gerenciamento de tarefas com autenticação e roteamento protegidos. Os usuários podem buscar, filtrar, ordenar, criar, concluir e deletar tarefas. A aplicação utiliza **Context API**, **Tailwind CSS**, **Flowbite**, e **React Icons**.
+Este projeto é uma aplicação fullstack desenvolvida com **Next.js** **NestJS** que implementa um sistema de gerenciamento de tarefas com autenticação e roteamento protegidos. Os usuários podem buscar, filtrar, ordenar, criar, concluir e deletar tarefas. A aplicação utiliza **Context API**, **Tailwind CSS**, **Flowbite**, **Express.js**, **TypeORM** e **React Icons**.
 
 ## Funcionalidades
 
@@ -17,18 +17,54 @@ Este projeto é uma aplicação desenvolvida com **Next.js** que implementa um s
 
 - [Next.js](https://nextjs.org/)
 - [React](https://react.dev/)
+- [Nesj.js](https://nestjs.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Flowbite](https://flowbite.com/)
 - [React Icons](https://react-icons.github.io/react-icons/)
+- [Express.js](https://expressjs.com/)
 
 ## Como rodar o projeto
 
-1. Clone o repositório:
+1. Clone o repositório e acessa a pasta:
 
-   ```bash
+```bash
    git clone https://github.com/MCastegnaro/Taskify.git
+
    cd taskify
-   ```
+```
+
+2. Muita **atenção** aqui! Existem duas formas de rodar o projeto.
+
+- A primeira, é rodar cada projeto de forma individual. Caso você opte por essa abordagem, cada projeto tem o seu readme.md explicando o passo a passo para subir cada aplicação e garantir que as duas funcionem corretamente.
+- A segunda é criando as aplicações com docker e docker-compose!
+
+3. Caso você opte por rodar com o `docker-compose`, note que na raiz deste projeto há um arquivo chamado `docker-compose.yml`. Rode o comando:
+
+```bash
+docker-compose up -d
+```
+
+4. Após rodar o comando, os containers serão criados e configurados com as aplicações:
+
+![alt text](/assets/docker.png)
+
+5. As aplicações estão disponíveis em:
+
+- Frontend: http://localhost:3001/login
+- Backend: http://localhost:3000/
+- Adminer: http://localhost:8080/
+
+6. Configurando o Adminer, esse camarada é um SGBD que irá te ajudar a fazer a gestão dos dados de uma forma prática. Para configurá-lo é bem simples, basta adicionar os seguintes dados:
+
+![alt text](/assets/adminer.png)
+
+Sendo:
+
+- Motor de Base de dados: PostgreSQL
+- Servidor: pgsql
+- User: pguser
+- Password: pgpassword
+- Base de dados: taskifydb
 
 ## Estrutura do Projeto
 

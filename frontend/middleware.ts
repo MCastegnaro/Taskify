@@ -6,9 +6,13 @@ export function middleware(request: NextRequest) {
 
   const isAuthenticated = !!token;
 
-  const isPublicRoute = ["/login", "/register"].includes(
-    request.nextUrl.pathname,
-  );
+  const pathname = request.nextUrl.pathname;
+
+  const isPublicRoute = ["/", "/login", "/register"].includes(pathname);
+
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   if (!isAuthenticated && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -22,5 +26,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/tasks", "/login", "/register"],
+  matcher: ["/", "/tasks", "/login", "/register"],
 };

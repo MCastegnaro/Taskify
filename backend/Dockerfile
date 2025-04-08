@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -10,6 +10,10 @@ COPY . .
 
 RUN npm run build
 
+COPY wait-for-db.sh .
+
+RUN chmod +x wait-for-db.sh
+
 EXPOSE 3000
 
-CMD ["npm", "run", "start:prod"]
+ENTRYPOINT ["./wait-for-db.sh"]

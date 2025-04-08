@@ -1,27 +1,6 @@
-version: '3.8'
+version: '3'
 
 services:
-  backend:
-    build: ./backend
-    container_name: backend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - pgsql
-    environment:
-      DATABASE_URL: postgres://pguser:pgpassword@pgsql:5432/meubanco
-    restart: always
-
-  frontend:
-    build: ./frontend
-    container_name: frontend
-    ports:
-      - "3001:3001"
-    depends_on:
-      - backend
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3000
-    restart: always
 
   pgsql:
     image: postgres:alpine
@@ -41,6 +20,30 @@ services:
     restart: always
     ports:
       - "8080:8080"
+      
+  backend:
+    build: ./backend
+    container_name: backend-taskify
+    ports:
+      - "3000:3000"
+    depends_on:
+      - pgsql
+    environment:
+      DATABASE_URL: postgres://pguser:pgpassword@pgsql:5432/taskifydb
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: frontend-taskify
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    restart: always
+
+  
 
 volumes:
   pg-data:
