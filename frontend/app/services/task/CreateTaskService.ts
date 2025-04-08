@@ -27,6 +27,8 @@ export class CreateTaskService {
     switch (statusCode) {
       case HttpStatusCode.created:
         return body as CreateTasksResponseDto;
+      case HttpStatusCode.noContent:
+        return body as CreateTasksResponseDto;
       default:
         throw new Error();
     }

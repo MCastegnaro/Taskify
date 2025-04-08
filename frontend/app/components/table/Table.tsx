@@ -163,7 +163,7 @@ const Table = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((item: Task, index: number) => (
+            {tasks?.map((item: Task, index: number) => (
               <tr
                 key={item.id}
                 className={`hover:bg-gray-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
@@ -221,14 +221,14 @@ const Table = () => {
         </table>
       </div>
 
-      {tasks.length <= 0 && (
+      {tasks?.length <= 0 && (
         <div className="flex w-full items-center justify-center border-x bg-gray-50 hover:bg-gray-200">
           <p className="p-10">Sem tarefas cadastradas :(</p>
         </div>
       )}
 
       <div className="mb-20 flex flex-col items-center justify-between gap-4 border border-t-0 p-6 sm:flex-row sm:px-16">
-        {tasks.length > 0 && (
+        {tasks?.length > 0 && (
           <>
             <select
               className="rounded-md border border-gray-200 bg-gray-50 p-2"
