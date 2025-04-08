@@ -1,103 +1,79 @@
-# 🚀 Full Stack Project (Frontend & Backend)
+# 💻 Frontend - Next.js
 
-This project consists of a **NestJS** backend and a **Next.js** frontend, using **PostgreSQL** as the database and **Docker** for containerization.
+Este é o projeto de frontend da aplicação, desenvolvido com [Next.js](https://nextjs.org/). Ele fornece a interface de usuário da aplicação.
 
----
+## 🚀 Tecnologias
 
-## 📌 Technologies Used
+- React + Next.js
+- TypeScript
+- Tailwind CSS
+- Flowbite
+- Cypress
 
-### Backend:
+## ✅ Pré-requisitos
 
-- [NestJS](https://nestjs.com/) - Node.js framework
-- [TypeORM](https://typeorm.io/) - ORM for database management
-- [PostgreSQL](https://www.postgresql.org/) - Relational database
-- [Docker](https://www.docker.com/) - Containerization
-- [Adminer](https://www.adminer.org/) - Simple local SGBD
-- [Jest](https://jestjs.io/) - Automated testing
+- Node.js 18+
+- Yarn (ou npm)
 
-### Frontend:
+## 📦 Como rodar este front-end
 
-- [Next.js](https://nextjs.org/) - React-based framework
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [Axios](https://axios-http.com/) - HTTP client for API requests
+1. Na raiz desta pasta rode `npm install` e instale as dependências.
+2. Configure o .env, existe um `.env.exemple` com as variaveis necessárias.
+3. Execute sua aplicação usando o comando `npm run dev`.
+4. Acesse a rota de /login.
+5. Se tudo deu certo, você chegará nesta tela:
 
----
+![alt text](/assets/login.png)
 
-## Setup Instructions for FRONTEND
+## Funcionalidades da UI
 
-`Instructions for configuring the backend are in the flatirons-server readme.`
+🔐 Autenticação
 
-### 1. Prerequisites
+- Login do usuário com persistência de token.
+- Proteção de rotas: impede acesso à dashboard sem estar autenticado.
+- Redirecionamento automático para login/logout.
 
-Ensure you have the following installed:
+📋 Gestão de Tarefas
 
-- [Node.js](https://nodejs.org/) (LTS recommended)
-- [Yarn](https://yarnpkg.com/) or npm
+Listagem de tarefas com:
 
-Modify the .env file with your database credentials.
+- Título, descrição e status.
+- Ordenação por título e status (ASC/DESC).
+- Paginação dinâmica com seleção de itens por página.
+- Contador total de tarefas.
 
-### 2️ Installation
+🔍 Busca e Filtro
 
-Clone the repository and install dependencies:
+- Busca por título de tarefa (a partir de 3 caracteres).
+- Filtro por status usando select:
+  -- Todos
+  -- Em andamento
+  -- Concluído (ou outros definidos via enum TaskStatus)
 
-```sh
- git clone https://github.com/flatironsdevelopment/rails_node_test_MCastegnaro.git
+➕ Criação de Tarefa
 
-cd rails_node_test_MCastegnaro/wabapp/flatirons-ui
+- Abertura de modal (TaskModal) para cadastrar nova tarefa.
+- Envio dos dados para API e atualização da listagem.
 
-npm install  # or yar install
-```
+✅ Ações da Tarefa
 
-### 3 Running the Project
+Menu suspenso (Dropdown) com ações:
 
-Start the development server:
-
-```sh
-yarn dev  # or npm run dev
-```
-
-The application will be available at [http://localhost:3000](http://localhost:3000).
-
-### 4 Building for Production
-
-To create an optimized production build:
-
-```sh
-yarn build  # or npm run build
-```
-
-Then, start the server:
-
-```sh
-yarn start  # or npm start
-```
+- Concluir tarefa
+- Deletar tarefa
 
 # Screenshots
 
-List of products
+Registro de usuários
+![alt text](/assets/registro.png)
 
-![Project Logo](assets/list.png)
+Listagem de tarefas
+![alt text](/assets/listagem.png)
 
-Upload a csv file
+Ações de modais
 
-![Project Logo](assets/upload.png)
+![alt text](/assets/acoes.png)
 
-Change currency
+Modal
 
-![Project Logo](assets/currency.png)
-
-Order by name, price and expiration
-
-![Project Logo](assets/order.png)
-
-Search for name, price and expiration
-
-![Project Logo](assets/search.png)
-
-Upload massive csv files
-
-![Project Logo](assets/massive.png)
-
-## 📜 License
-
-This project is licensed under the MIT License.
+![alt text](/assets/modal.png)
