@@ -95,7 +95,7 @@ const Table = () => {
             Tarefas adicionadas
           </h3>
           <span className="rounded-sm bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-            {totalItems + " tarefas"}
+            {totalItems ? " tarefas" : "Nenhuma tarefa"}
           </span>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
