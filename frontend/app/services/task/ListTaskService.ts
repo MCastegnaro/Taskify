@@ -33,6 +33,7 @@ export class ListTaskService {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "ngrok-skip-browser-warning": "69420",
       },
     });
 

@@ -9,10 +9,14 @@ async function bootstrap() {
   app.use(json());
 
   app.enableCors({
-    origin: '*',
+    origin: ['*'],
     methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type,Authorization',
-    credentials: true,
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'Ngrok-Skip-Browser-Warning',
+    ],
   });
 
   await app.listen(process.env.PORT ?? 3000);
