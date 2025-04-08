@@ -23,6 +23,9 @@ Este projeto é uma aplicação fullstack desenvolvida com **Next.js** e **NestJ
 - [React Icons](https://react-icons.github.io/react-icons/)
 - [Express.js](https://expressjs.com/)
 
+## Live on
+Caso queira apenas conhecer o projeto, ele está disponível para acesso em: https://taskify-ten-beta.vercel.app/login
+      
 ## Como rodar o projeto
 
 1. Clone o repositório e acessa a pasta:
