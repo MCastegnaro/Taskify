@@ -15,9 +15,7 @@ export class CreateSessionService {
   async create(
     params: CreateSessionParams,
   ): Promise<CreateSessionParamsResponse | CreateSessionParamsResponse> {
-    const url = new URL(this.path, "http://localhost:3000");
-
-    console.log("Login payload:", params);
+    const url = new URL(this.path, process.env.NEXT_PUBLIC_API_URL);
 
     const { statusCode, body } = await this.httpClient.request({
       method: "post",
